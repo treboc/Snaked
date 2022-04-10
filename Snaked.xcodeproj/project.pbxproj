@@ -7,16 +7,30 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8A44CAB12801B4AC005EC1D0 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A44CAB02801B4AC005EC1D0 /* GameScene.swift */; };
+		8A44CAB32801CEEE005EC1D0 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A44CAB22801CEEE005EC1D0 /* HapticManager.swift */; };
+		8A802B49280205E5002999AB /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A802B48280205E5002999AB /* SettingsView.swift */; };
+		8A802B4B280294D0002999AB /* ColorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A802B4A280294D0002999AB /* ColorManager.swift */; };
+		8A802B4F28029982002999AB /* SKSpriteNode+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A802B4E28029982002999AB /* SKSpriteNode+Extension.swift */; };
+		8A802B532802B119002999AB /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8A802B522802B119002999AB /* Launch Screen.storyboard */; };
+		8A802B552802B180002999AB /* UIDevice+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A802B542802B180002999AB /* UIDevice+Extension.swift */; };
 		8A858C942800C789002385E1 /* SnakedApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A858C932800C789002385E1 /* SnakedApp.swift */; };
-		8A858C962800C789002385E1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A858C952800C789002385E1 /* ContentView.swift */; };
+		8A858C962800C789002385E1 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A858C952800C789002385E1 /* GameView.swift */; };
 		8A858C982800C78A002385E1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8A858C972800C78A002385E1 /* Assets.xcassets */; };
 		8A858C9B2800C78A002385E1 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8A858C9A2800C78A002385E1 /* Preview Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8A44CAB02801B4AC005EC1D0 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
+		8A44CAB22801CEEE005EC1D0 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
+		8A802B48280205E5002999AB /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		8A802B4A280294D0002999AB /* ColorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorManager.swift; sourceTree = "<group>"; };
+		8A802B4E28029982002999AB /* SKSpriteNode+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SKSpriteNode+Extension.swift"; sourceTree = "<group>"; };
+		8A802B522802B119002999AB /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		8A802B542802B180002999AB /* UIDevice+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+Extension.swift"; sourceTree = "<group>"; };
 		8A858C902800C789002385E1 /* Snaked.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Snaked.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A858C932800C789002385E1 /* SnakedApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnakedApp.swift; sourceTree = "<group>"; };
-		8A858C952800C789002385E1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		8A858C952800C789002385E1 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 		8A858C972800C78A002385E1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8A858C9A2800C78A002385E1 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -32,6 +46,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8A802B4C280294E6002999AB /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				8A44CAB22801CEEE005EC1D0 /* HapticManager.swift */,
+				8A802B4A280294D0002999AB /* ColorManager.swift */,
+				8A802B4E28029982002999AB /* SKSpriteNode+Extension.swift */,
+				8A802B522802B119002999AB /* Launch Screen.storyboard */,
+				8A802B542802B180002999AB /* UIDevice+Extension.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		8A802B4D280294F5002999AB /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				8A858C952800C789002385E1 /* GameView.swift */,
+				8A802B48280205E5002999AB /* SettingsView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		8A858C872800C789002385E1 = {
 			isa = PBXGroup;
 			children = (
@@ -52,7 +87,9 @@
 			isa = PBXGroup;
 			children = (
 				8A858C932800C789002385E1 /* SnakedApp.swift */,
-				8A858C952800C789002385E1 /* ContentView.swift */,
+				8A44CAB02801B4AC005EC1D0 /* GameScene.swift */,
+				8A802B4D280294F5002999AB /* Views */,
+				8A802B4C280294E6002999AB /* Components */,
 				8A858C972800C78A002385E1 /* Assets.xcassets */,
 				8A858C992800C78A002385E1 /* Preview Content */,
 			);
@@ -125,6 +162,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A802B532802B119002999AB /* Launch Screen.storyboard in Resources */,
 				8A858C9B2800C78A002385E1 /* Preview Assets.xcassets in Resources */,
 				8A858C982800C78A002385E1 /* Assets.xcassets in Resources */,
 			);
@@ -137,7 +175,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8A858C962800C789002385E1 /* ContentView.swift in Sources */,
+				8A802B49280205E5002999AB /* SettingsView.swift in Sources */,
+				8A858C962800C789002385E1 /* GameView.swift in Sources */,
+				8A802B552802B180002999AB /* UIDevice+Extension.swift in Sources */,
+				8A44CAB12801B4AC005EC1D0 /* GameScene.swift in Sources */,
+				8A802B4F28029982002999AB /* SKSpriteNode+Extension.swift in Sources */,
+				8A802B4B280294D0002999AB /* ColorManager.swift in Sources */,
+				8A44CAB32801CEEE005EC1D0 /* HapticManager.swift in Sources */,
 				8A858C942800C789002385E1 /* SnakedApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -273,6 +317,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -284,7 +330,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -302,6 +348,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -313,7 +361,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
