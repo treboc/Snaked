@@ -10,16 +10,7 @@ import SpriteKit
 import UIKit
 
 struct GameView: View {
-  @StateObject var scene: GameScene = {
-    let scene = GameScene()
-    if UIDevice.current.hasNotch {
-      scene.size = CGSize(width: 300, height: 500)
-    } else {
-      scene.size = CGSize(width: 300, height: 400)
-    }
-    scene.scaleMode = .aspectFit
-    return scene
-  }()
+  @ObservedObject var scene: GameScene
 
   let tintColor: UIColor = ColorManager.colorTheme.tintColor
   var isAnimating: Bool {
@@ -37,7 +28,7 @@ struct GameView: View {
 
   var body: some View {
     ZStack(alignment: .center) {
-      Color(uiColor: ColorManager.colorTheme.backgroundColor)
+      Color(uiColor: ColorManager.colorTheme.secondBackgroundColor)
         .ignoresSafeArea()
 
       VStack {
@@ -62,7 +53,9 @@ struct GameView: View {
                                 shouldAnimate: true)
                    : nil)
       }
-      .frame(maxWidth: sceneFrameWidth)
+      .padding(.vertical)
+      .padding(.horizontal)
+//      .frame(maxWidth: sceneFrameWidth)
 
       if scene.gameOver {
         gameOverOverlay
@@ -85,7 +78,6 @@ extension GameView {
           LinearGradient(colors: ColorManager.colorTheme.gradientColors, startPoint: .leading, endPoint: .trailing)
         )
         .mask(Text("Snaked").font(.largeTitle.bold()))
-        .padding(.bottom)
       Spacer()
     }
   }
@@ -114,12 +106,11 @@ extension GameView {
 
   private var spriteKitScene: some View {
     SpriteView(scene: scene)
-      .frame(width: sceneFrameWidth, height: sceneFrameHeight)
       .overlay(
         Rectangle()
-          .strokeBorder(Color(uiColor: .label), lineWidth: 1)
+          .stroke(Color(uiColor: .label), lineWidth: 1)
       )
-      .shadow(color: isAnimating ? Color(uiColor: ColorManager.colorTheme.tintColor) : .clear, radius: 5, x: 0, y: 0)
+      .shadow(color: isAnimating ? Color(uiColor: ColorManager.colorTheme.foodColors[2]) : .clear, radius: 10, x: 0, y: 0)
       .animation(.easeInOut(duration: 2).repeatForever(), value: isAnimating)
   }
 
@@ -132,6 +123,7 @@ extension GameView {
     }
     .buttonStyle(.borderedProminent)
     .tint(Color(uiColor: tintColor))
+    .foregroundColor(Color(uiColor: ColorManager.colorTheme.backgroundColor))
     .disabled(scene.state == .notStarted || scene.state == .ended)
   }
 
@@ -146,6 +138,7 @@ extension GameView {
     }
     .buttonStyle(.borderedProminent)
     .tint(Color(uiColor: tintColor))
+    .foregroundColor(Color(uiColor: ColorManager.colorTheme.backgroundColor))
   }
 
   private var gameOverOverlay: some View {
@@ -181,14 +174,14 @@ extension GameView {
       .padding()
       .background(
         RoundedRectangle(cornerRadius: 10)
-          .fill(Color(uiColor: ColorManager.colorTheme.tintColor))
-          .overlay(RoundedRectangle(cornerRadius: 10)
-            .strokeBorder(.gray))
+          .fill(Color(uiColor: !isAnimated ? ColorManager.colorTheme.tintColor : ColorManager.colorTheme.foodColors[3]))
       )
-      .opacity(!isAnimated ? 1 : 0)
+      .foregroundColor(Color(uiColor: ColorManager.colorTheme.backgroundColor))
+      .padding()
+//      .opacity(!isAnimated ? 1 : 0.8)
       .onAppear {
         if shouldAnimate {
-          withAnimation(.easeInOut(duration: 1).repeatForever()) {
+          withAnimation(.easeInOut(duration: 2).repeatForever()) {
             isAnimated.toggle()
           }
         }

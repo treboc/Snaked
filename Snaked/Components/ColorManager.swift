@@ -12,7 +12,6 @@ struct ColorManager {
   static let colorTheme = Dracula()
 
   struct BaseTheme {
-    let name = "Default"
     let backgroundColor: Color = Color(uiColor: .tertiarySystemBackground)
     let snakeColor: UIColor = .label
     let snakeBorderColor: UIColor = .black
@@ -21,8 +20,8 @@ struct ColorManager {
   }
 
   struct Dracula {
-    let name = "Dracula"
     let backgroundColor: UIColor = UIColor.init(red: 40/255, green: 42/255, blue: 54/255, alpha: 1)
+    let secondBackgroundColor: UIColor = UIColor.init(red: 68/255, green: 71/255, blue: 90/255, alpha: 1) // 68 71 90  
     let snakeColor: UIColor = UIColor.init(red: 80/255, green: 250/255, blue: 123/255, alpha: 1)
     let snakeBorderColor: UIColor = .black
     let foodBorderColor: UIColor = .black

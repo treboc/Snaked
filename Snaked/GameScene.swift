@@ -72,6 +72,12 @@ class GameScene: SKScene, ObservableObject {
   }
 
   override func didMove(to view: SKView) {
+    self.scaleMode = .fill
+    if UIDevice.current.hasNotch {
+      self.size = CGSize(width: 300, height: 500)
+    } else {
+      self.size = CGSize(width: 300, height: 400)
+    }
     highscore = UserDefaults.standard.integer(forKey: "highscore")
     loadSettings()
     initialSetup()
@@ -104,7 +110,6 @@ class GameScene: SKScene, ObservableObject {
   func endGame() {
     HapticManager.shared.notification(type: .error)
     gameOver.toggle()
-    print("game over")
     self.timer?.invalidate()
   }
 
@@ -135,7 +140,6 @@ class GameScene: SKScene, ObservableObject {
     do {
       if let optionsData = UserDefaults.standard.data(forKey: "options") {
         options = try decoder.decode(Options.self, from: optionsData)
-        print("Settings loaded!")
       }
     } catch {
       print("Error loading options from user defaults, \(error)")
@@ -147,7 +151,6 @@ class GameScene: SKScene, ObservableObject {
     do {
       let encodedOptions = try encoder.encode(options)
       UserDefaults.standard.set(encodedOptions, forKey: "options")
-      print("Settings saved!")
     } catch {
       print("Coudn't encode options.")
     }
@@ -233,13 +236,13 @@ extension GameScene {
       var pos = snakePosition
       switch dir {
       case .left:
-        pos.x += snakeLength
+        pos.x -= snakeLength
         return pos
       case .up:
         pos.y += snakeLength
         return pos
       case .right:
-        pos.x -= snakeLength
+        pos.x += snakeLength
         return pos
       case .down:
         pos.y -= snakeLength
