@@ -37,9 +37,7 @@ struct GameView: View {
           menuButton
           pauseButton
         }
-
         title
-
         scoreHeader
         spriteKitScene
           .overlay((scene.state == .notStarted) ?
@@ -55,14 +53,12 @@ struct GameView: View {
       }
       .padding(.vertical)
       .padding(.horizontal)
-//      .frame(maxWidth: sceneFrameWidth)
 
-      if scene.gameOver {
+      if scene.state == .gameOver {
         gameOverOverlay
           .navigationBarHidden(true)
       }
     }
-
     .sheet(isPresented: $scene.showOptions) {
       SettingsView(gameScene: scene)
     }
@@ -108,9 +104,9 @@ extension GameView {
     SpriteView(scene: scene)
       .overlay(
         Rectangle()
-          .stroke(Color(uiColor: .label), lineWidth: 1)
+          .stroke(Color(uiColor: .label), lineWidth: scene.options.wallsEnabled ? 2 : 0)
       )
-      .shadow(color: isAnimating ? Color(uiColor: ColorManager.colorTheme.foodColors[2]) : .clear, radius: 10, x: 0, y: 0)
+      .shadow(color: (isAnimating && scene.options.wallsEnabled) ? Color(uiColor: ColorManager.colorTheme.foodColors[2]) : .clear, radius: 10, x: 0, y: 0)
       .animation(.easeInOut(duration: 2).repeatForever(), value: isAnimating)
   }
 
@@ -124,7 +120,7 @@ extension GameView {
     .buttonStyle(.borderedProminent)
     .tint(Color(uiColor: tintColor))
     .foregroundColor(Color(uiColor: ColorManager.colorTheme.backgroundColor))
-    .disabled(scene.state == .notStarted || scene.state == .ended)
+    .disabled(scene.state == .notStarted || scene.state == .gameOver)
   }
 
   private var menuButton: some View {
@@ -178,7 +174,6 @@ extension GameView {
       )
       .foregroundColor(Color(uiColor: ColorManager.colorTheme.backgroundColor))
       .padding()
-//      .opacity(!isAnimated ? 1 : 0.8)
       .onAppear {
         if shouldAnimate {
           withAnimation(.easeInOut(duration: 2).repeatForever()) {

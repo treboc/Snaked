@@ -10,23 +10,19 @@ import SpriteKit
 import SwiftUI
 
 struct Options: Codable, Equatable {
-  var withBorders = false
+  var showNodeBorders = true
+  var wallsEnabled = false
   var gameSpeedSelection: GameScene.GameSpeed = .normal
 }
 
 class GameScene: SKScene, ObservableObject {
   // MARK: - Properties
-  @Published var gameOver: Bool = false
+//  @Published var gameOver: Bool = false
   @Published var dir: Direction = .up
   @Published var state: gameState = .notStarted
   @Published var snake: [SKSpriteNode] = []
   @Published var food: SKSpriteNode!
-
-  // GameOptions
-  struct OptionKeys {
-    static let withBordersKey = "withBordersKey"
-    static let gameSpeedKey = "gameSpeedKey"
-  }
+  var soundAction: SKAction!
 
   @Published var options = Options()
   @Published var showOptions: Bool = false
@@ -43,9 +39,8 @@ class GameScene: SKScene, ObservableObject {
   @Published var highscore: Int = 0
 
   enum gameState {
-    case notStarted, playing, paused, ended
+    case notStarted, playing, paused, gameOver
   }
-
 
   enum GameSpeed: TimeInterval, CaseIterable, Codable {
     case superSlow = 1
@@ -101,7 +96,7 @@ class GameScene: SKScene, ObservableObject {
     self.timer?.invalidate()
     self.timer = Timer.scheduledTimer(withTimeInterval: options.gameSpeedSelection.rawValue, repeats: true, block: { [weak self] _ in
       guard let self = self else { return }
-      if !self.gameOver {
+      if self.state == .playing {
         self.moveSnake()
       }
     })
@@ -109,12 +104,12 @@ class GameScene: SKScene, ObservableObject {
 
   func endGame() {
     HapticManager.shared.notification(type: .error)
-    gameOver.toggle()
+    self.state = .gameOver
     self.timer?.invalidate()
   }
 
   func restartGame() {
-    self.gameOver = false
+//    self.gameOver = false
     self.snake.removeAll()
     self.removeAllChildren()
 
@@ -172,7 +167,7 @@ extension GameScene {
     let snakeYPosition = frame.midY + (snakeLength)
 
     let snakeHead = SKSpriteNode(color: ColorManager.colorTheme.snakeColor, size: snakeHeadSize)
-    if options.withBorders {
+    if options.showNodeBorders {
       snakeHead.drawBorder(color: ColorManager.colorTheme.snakeBorderColor, width: 1)
     }
     snakeHead.position = CGPoint(x: snakeXPosition, y: snakeYPosition)
@@ -183,7 +178,7 @@ extension GameScene {
 
   func setupFood() {
     self.food = SKSpriteNode(color: ColorManager.colorTheme.foodColors.randomElement()!, size: snakeHeadSize)
-    if options.withBorders {
+    if options.showNodeBorders {
       food.drawBorder(color: ColorManager.colorTheme.foodBorderColor, width: 1)
     }
     self.food.position = randomFoodPosition(in: self.frame, with: snakeLength)
@@ -203,16 +198,16 @@ extension GameScene {
     let yDist = abs(currentTouchLocation.y - self.startTouchLocation.y)
 
     if self.startTouchLocation.y > currentTouchLocation.y && yDist > xDist && self.dir != .up {
-      self.dir = Direction.down
+      self.dir = .down
     }
     else if self.startTouchLocation.y < currentTouchLocation.y && yDist > xDist && self.dir != .down {
-      self.dir = Direction.up
+      self.dir = .up
     }
     else if self.startTouchLocation.x < currentTouchLocation.x && yDist < xDist && self.dir != .left {
-      self.dir = Direction.right
+      self.dir = .right
     }
     else if self.startTouchLocation.x > currentTouchLocation.x && yDist < xDist && self.dir != .right {
-      self.dir = Direction.left
+      self.dir = .left
     }
   }
 
@@ -226,7 +221,7 @@ extension GameScene {
       snakeBody = snake.dropFirst()
       for bodyPart in snakeBody {
         if bodyPart.position == snakePosition {
-          gameOver.toggle()
+          state = .gameOver
           return
         }
       }
@@ -251,8 +246,8 @@ extension GameScene {
     }
 
     // Check if snakeHead is on food -> let snake grow
-    if positionInFront == food.position  && !gameOver {
-      grow()
+    if positionInFront == food.position  && state == .playing {
+      eatFood()
     }
 
     // save the position before movement, to pass it to the body part behind the head
@@ -278,26 +273,47 @@ extension GameScene {
     }
 
     // "Collision" check on the walls
-    switch dir {
-    case .left:
-      if snakePosition.x == sceneFrame.minX && !gameOver {
-        endGame()
-        return
+    if options.wallsEnabled {
+      switch dir {
+      case .left:
+        if snakePosition.x == sceneFrame.minX {
+          endGame()
+          return
+        }
+      case .up:
+        if snakePosition.y + snakeLength == sceneFrame.maxY {
+          endGame()
+          return
+        }
+      case .right:
+        if snakePosition.x + snakeLength == sceneFrame.maxX {
+          endGame()
+          return
+        }
+      case .down:
+        if snakePosition.y == sceneFrame.minY {
+          endGame()
+          return
+        }
       }
-    case .up:
-      if snakePosition.y + snakeLength == sceneFrame.maxY && !gameOver {
-        endGame()
-        return
-      }
-    case .right:
-      if snakePosition.x + snakeLength == sceneFrame.maxX && !gameOver {
-        endGame()
-        return
-      }
-    case .down:
-      if snakePosition.y == sceneFrame.minY && !gameOver {
-        endGame()
-        return
+    } else if !options.wallsEnabled {
+      switch dir {
+      case .left:
+        if snakePosition.x == sceneFrame.minX {
+          snake[0].position.x = sceneFrame.maxX - snakeLength
+        }
+      case .up:
+        if snakePosition.y + snakeLength == sceneFrame.maxY {
+          snake[0].position.y = sceneFrame.minY
+        }
+      case .right:
+        if snakePosition.x + snakeLength == sceneFrame.maxX {
+          snake[0].position.x = sceneFrame.minX
+        }
+      case .down:
+        if snakePosition.y == sceneFrame.minY {
+          snake[0].position.y = sceneFrame.maxY - snakeLength
+        }
       }
     }
   }
@@ -321,20 +337,30 @@ extension GameScene {
     return randomPosition
   }
 
-  func grow() {
-    self.food?.position = randomFoodPosition(in: self.frame, with: snakeLength)
-    self.food?.color = ColorManager.colorTheme.foodColors.randomElement()!
-
-    let snakeBodyPart = SKSpriteNode(color: ColorManager.colorTheme.snakeColor, size: snakeHeadSize)
-    snakeBodyPart.anchorPoint = .zero
-    if options.withBorders { snakeBodyPart.drawBorder(color: ColorManager.colorTheme.snakeBorderColor, width: 1) }
-    self.snake.append(snakeBodyPart)
-    self.addChild(snakeBodyPart)
-
+  fileprivate func updateHighscore() {
     if score > highscore {
       highscore = score
       UserDefaults.standard.set(highscore, forKey: "highscore")
     }
+  }
+
+  fileprivate func growSnake() {
+    let snakeBodyPart = SKSpriteNode(color: ColorManager.colorTheme.snakeColor, size: snakeHeadSize)
+    snakeBodyPart.anchorPoint = .zero
+    if options.showNodeBorders { snakeBodyPart.drawBorder(color: ColorManager.colorTheme.snakeBorderColor, width: 1) }
+    self.snake.append(snakeBodyPart)
+    self.addChild(snakeBodyPart)
+  }
+
+  func eatFood() {
+    soundAction = SKAction.playSoundFileNamed("bite.wav", waitForCompletion: true)
+    snake.first!.run(soundAction)
+
+    self.food?.position = randomFoodPosition(in: self.frame, with: snakeLength)
+    self.food?.color = ColorManager.colorTheme.foodColors.randomElement()!
+
+    growSnake()
+    updateHighscore()
 
     HapticManager.shared.notification(type: .success)
   }
