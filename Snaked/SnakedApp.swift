@@ -30,7 +30,9 @@ struct SnakedApp: App {
 
   func handleResignActive(_ note: Notification) {
     // when app goes into background state
-    scene.togglePlayPause()
+    if scene.state == .playing {
+      scene.togglePlayPause()
+    }
   }
 
   func handleBecomeActive(_ note: Notification) {
