@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8A10A2EB2804AF56000B1F7B /* bite.wav in Resources */ = {isa = PBXBuildFile; fileRef = 8A10A2EA2804AF56000B1F7B /* bite.wav */; };
+		8A10A2ED2804BF58000B1F7B /* GameSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A10A2EC2804BF58000B1F7B /* GameSettings.swift */; };
 		8A44CAB12801B4AC005EC1D0 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A44CAB02801B4AC005EC1D0 /* GameScene.swift */; };
 		8A44CAB32801CEEE005EC1D0 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A44CAB22801CEEE005EC1D0 /* HapticManager.swift */; };
 		8A802B49280205E5002999AB /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A802B48280205E5002999AB /* SettingsView.swift */; };
@@ -23,6 +24,7 @@
 
 /* Begin PBXFileReference section */
 		8A10A2EA2804AF56000B1F7B /* bite.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = bite.wav; sourceTree = "<group>"; };
+		8A10A2EC2804BF58000B1F7B /* GameSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSettings.swift; sourceTree = "<group>"; };
 		8A44CAB02801B4AC005EC1D0 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		8A44CAB22801CEEE005EC1D0 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
 		8A802B48280205E5002999AB /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -60,6 +62,7 @@
 		8A802B4C280294E6002999AB /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				8A10A2EC2804BF58000B1F7B /* GameSettings.swift */,
 				8A44CAB22801CEEE005EC1D0 /* HapticManager.swift */,
 				8A802B4A280294D0002999AB /* ColorManager.swift */,
 				8A802B4E28029982002999AB /* SKSpriteNode+Extension.swift */,
@@ -191,6 +194,7 @@
 				8A858C962800C789002385E1 /* GameView.swift in Sources */,
 				8A802B552802B180002999AB /* UIDevice+Extension.swift in Sources */,
 				8A44CAB12801B4AC005EC1D0 /* GameScene.swift in Sources */,
+				8A10A2ED2804BF58000B1F7B /* GameSettings.swift in Sources */,
 				8A802B4F28029982002999AB /* SKSpriteNode+Extension.swift in Sources */,
 				8A802B4B280294D0002999AB /* ColorManager.swift in Sources */,
 				8A44CAB32801CEEE005EC1D0 /* HapticManager.swift in Sources */,

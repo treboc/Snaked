@@ -104,9 +104,9 @@ extension GameView {
     SpriteView(scene: scene)
       .overlay(
         Rectangle()
-          .stroke(Color(uiColor: .label), lineWidth: scene.options.wallsEnabled ? 2 : 0)
+          .stroke(Color(uiColor: .label), lineWidth: scene.gameSettings.wallsEnabled ? 2 : 0)
       )
-      .shadow(color: (isAnimating && scene.options.wallsEnabled) ? Color(uiColor: ColorManager.colorTheme.foodColors[2]) : .clear, radius: 10, x: 0, y: 0)
+      .shadow(color: (isAnimating && scene.gameSettings.wallsEnabled) ? Color(uiColor: ColorManager.colorTheme.foodColors[2]) : .clear, radius: 10, x: 0, y: 0)
       .animation(.easeInOut(duration: 2).repeatForever(), value: isAnimating)
   }
 

@@ -15,9 +15,9 @@ struct SettingsView: View {
     NavigationView {
       List {
         Section {
-          Toggle("Show borders around snake / food.", isOn: $gameScene.options.showNodeBorders)
-          Toggle("Enable walls.", isOn: $gameScene.options.wallsEnabled)
-          Picker("Speed", selection: $gameScene.options.gameSpeedSelection) {
+          Toggle("Show borders around snake / food.", isOn: $gameScene.gameSettings.showNodeBorders)
+          Toggle("Enable walls.", isOn: $gameScene.gameSettings.wallsEnabled)
+          Picker("Speed", selection: $gameScene.gameSettings.gameSpeedSelection) {
             ForEach(GameScene.GameSpeed.allCases, id: \.hashValue) { speed in
               Text("\(speed.description)")
                 .tag(speed)
@@ -36,10 +36,10 @@ struct SettingsView: View {
           }
         }
       }
-      .onChange(of: gameScene.options) { _ in
+      .onChange(of: gameScene.gameSettings) { _ in
         gameScene.restartGame()
       }
-      .onChange(of: gameScene.options) { _ in
+      .onChange(of: gameScene.gameSettings) { _ in
         gameScene.saveSettings()
       }
       .toolbar {

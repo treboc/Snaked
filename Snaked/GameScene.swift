@@ -9,22 +9,18 @@ import Foundation
 import SpriteKit
 import SwiftUI
 
-struct Options: Codable, Equatable {
-  var showNodeBorders = true
-  var wallsEnabled = false
-  var gameSpeedSelection: GameScene.GameSpeed = .normal
-}
+
 
 class GameScene: SKScene, ObservableObject {
   // MARK: - Properties
 //  @Published var gameOver: Bool = false
   @Published var dir: Direction = .up
-  @Published var state: gameState = .notStarted
+  @Published var state: GameState = .notStarted
   @Published var snake: [SKSpriteNode] = []
   @Published var food: SKSpriteNode!
   var soundAction: SKAction!
 
-  @Published var options = Options()
+  @Published var gameSettings = GameSettings()
   @Published var showOptions: Bool = false
 
   let snakeLength: CGFloat = 10
@@ -38,7 +34,7 @@ class GameScene: SKScene, ObservableObject {
   var score: Int { snake.count - 1 }
   @Published var highscore: Int = 0
 
-  enum gameState {
+  enum GameState {
     case notStarted, playing, paused, gameOver
   }
 
@@ -94,7 +90,7 @@ class GameScene: SKScene, ObservableObject {
 
   func startGame() {
     self.timer?.invalidate()
-    self.timer = Timer.scheduledTimer(withTimeInterval: options.gameSpeedSelection.rawValue, repeats: true, block: { [weak self] _ in
+    self.timer = Timer.scheduledTimer(withTimeInterval: gameSettings.gameSpeedSelection.rawValue, repeats: true, block: { [weak self] _ in
       guard let self = self else { return }
       if self.state == .playing {
         self.moveSnake()
@@ -134,7 +130,7 @@ class GameScene: SKScene, ObservableObject {
     let decoder = JSONDecoder()
     do {
       if let optionsData = UserDefaults.standard.data(forKey: "options") {
-        options = try decoder.decode(Options.self, from: optionsData)
+        gameSettings = try decoder.decode(GameSettings.self, from: optionsData)
       }
     } catch {
       print("Error loading options from user defaults, \(error)")
@@ -144,7 +140,7 @@ class GameScene: SKScene, ObservableObject {
   func saveSettings() {
     let encoder = JSONEncoder()
     do {
-      let encodedOptions = try encoder.encode(options)
+      let encodedOptions = try encoder.encode(gameSettings)
       UserDefaults.standard.set(encodedOptions, forKey: "options")
     } catch {
       print("Coudn't encode options.")
@@ -167,7 +163,7 @@ extension GameScene {
     let snakeYPosition = frame.midY + (snakeLength)
 
     let snakeHead = SKSpriteNode(color: ColorManager.colorTheme.snakeColor, size: snakeHeadSize)
-    if options.showNodeBorders {
+    if gameSettings.showNodeBorders {
       snakeHead.drawBorder(color: ColorManager.colorTheme.snakeBorderColor, width: 1)
     }
     snakeHead.position = CGPoint(x: snakeXPosition, y: snakeYPosition)
@@ -178,7 +174,7 @@ extension GameScene {
 
   func setupFood() {
     self.food = SKSpriteNode(color: ColorManager.colorTheme.foodColors.randomElement()!, size: snakeHeadSize)
-    if options.showNodeBorders {
+    if gameSettings.showNodeBorders {
       food.drawBorder(color: ColorManager.colorTheme.foodBorderColor, width: 1)
     }
     self.food.position = randomFoodPosition(in: self.frame, with: snakeLength)
@@ -273,7 +269,7 @@ extension GameScene {
     }
 
     // "Collision" check on the walls
-    if options.wallsEnabled {
+    if gameSettings.wallsEnabled {
       switch dir {
       case .left:
         if snakePosition.x == sceneFrame.minX {
@@ -347,7 +343,7 @@ extension GameScene {
   fileprivate func growSnake() {
     let snakeBodyPart = SKSpriteNode(color: ColorManager.colorTheme.snakeColor, size: snakeHeadSize)
     snakeBodyPart.anchorPoint = .zero
-    if options.showNodeBorders { snakeBodyPart.drawBorder(color: ColorManager.colorTheme.snakeBorderColor, width: 1) }
+    if gameSettings.showNodeBorders { snakeBodyPart.drawBorder(color: ColorManager.colorTheme.snakeBorderColor, width: 1) }
     self.snake.append(snakeBodyPart)
     self.addChild(snakeBodyPart)
   }
