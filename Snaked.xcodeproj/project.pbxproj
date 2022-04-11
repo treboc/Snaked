@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8A10A2EB2804AF56000B1F7B /* bite.wav in Resources */ = {isa = PBXBuildFile; fileRef = 8A10A2EA2804AF56000B1F7B /* bite.wav */; };
 		8A44CAB12801B4AC005EC1D0 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A44CAB02801B4AC005EC1D0 /* GameScene.swift */; };
 		8A44CAB32801CEEE005EC1D0 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A44CAB22801CEEE005EC1D0 /* HapticManager.swift */; };
 		8A802B49280205E5002999AB /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A802B48280205E5002999AB /* SettingsView.swift */; };
@@ -21,6 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8A10A2EA2804AF56000B1F7B /* bite.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = bite.wav; sourceTree = "<group>"; };
 		8A44CAB02801B4AC005EC1D0 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		8A44CAB22801CEEE005EC1D0 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
 		8A802B48280205E5002999AB /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -46,6 +48,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8A10A2E92804AF3F000B1F7B /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8A10A2EA2804AF56000B1F7B /* bite.wav */,
+				8A858C972800C78A002385E1 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		8A802B4C280294E6002999AB /* Components */ = {
 			isa = PBXGroup;
 			children = (
@@ -90,7 +101,7 @@
 				8A44CAB02801B4AC005EC1D0 /* GameScene.swift */,
 				8A802B4D280294F5002999AB /* Views */,
 				8A802B4C280294E6002999AB /* Components */,
-				8A858C972800C78A002385E1 /* Assets.xcassets */,
+				8A10A2E92804AF3F000B1F7B /* Resources */,
 				8A858C992800C78A002385E1 /* Preview Content */,
 			);
 			path = Snaked;
@@ -162,6 +173,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A10A2EB2804AF56000B1F7B /* bite.wav in Resources */,
 				8A802B532802B119002999AB /* Launch Screen.storyboard in Resources */,
 				8A858C9B2800C78A002385E1 /* Preview Assets.xcassets in Resources */,
 				8A858C982800C78A002385E1 /* Assets.xcassets in Resources */,
