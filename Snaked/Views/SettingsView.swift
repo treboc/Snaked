@@ -39,9 +39,14 @@ struct SettingsView: View {
       .onChange(of: gameScene.options) { _ in
         gameScene.restartGame()
       }
-      .onChange(of: gameScene.options, perform: { _ in
+      .onChange(of: gameScene.options) { _ in
         gameScene.saveSettings()
-      })
+      }
+      .toolbar {
+        ToolbarItem(placement: .navigationBarLeading) {
+          Button("Cancel") { dismiss() }
+        }
+      }
       .navigationTitle("Settings")
     }
     .tint(Color(uiColor: ColorManager.colorTheme.tintColor))
