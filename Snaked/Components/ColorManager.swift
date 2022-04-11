@@ -10,15 +10,7 @@ import SwiftUI
 
 struct ColorManager {
   static let colorTheme = Dracula()
-
-  struct BaseTheme {
-    let backgroundColor: Color = Color(uiColor: .tertiarySystemBackground)
-    let snakeColor: UIColor = .label
-    let snakeBorderColor: UIColor = .black
-    let foodColor: UIColor = .red
-    let foodBorderColor: UIColor = .black
-  }
-
+  
   struct Dracula {
     let backgroundColor: UIColor = UIColor.init(red: 40/255, green: 42/255, blue: 54/255, alpha: 1)
     let secondBackgroundColor: UIColor = UIColor.init(red: 68/255, green: 71/255, blue: 90/255, alpha: 1) // 68 71 90  
