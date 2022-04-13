@@ -9,11 +9,9 @@ import Foundation
 import SpriteKit
 import SwiftUI
 
-
-
 class GameScene: SKScene, ObservableObject {
   // MARK: - Properties
-//  @Published var gameOver: Bool = false
+  private let colorTheme = UIColor.Dracula()
   @Published var dir: Direction = .up
   @Published var state: GameState = .notStarted
   @Published var snake: [SKSpriteNode] = []
@@ -21,7 +19,7 @@ class GameScene: SKScene, ObservableObject {
   var soundAction: SKAction!
 
   @Published var gameSettings = GameSettings()
-  @Published var showOptions: Bool = false
+  @Published var settingsAreShown: Bool = false
 
   let snakeLength: CGFloat = 10
   var snakeHeadSize: CGSize {
@@ -69,6 +67,7 @@ class GameScene: SKScene, ObservableObject {
     } else {
       self.size = CGSize(width: 300, height: 400)
     }
+
     highscore = UserDefaults.standard.integer(forKey: "highscore")
     loadSettings()
     initialSetup()
@@ -76,13 +75,14 @@ class GameScene: SKScene, ObservableObject {
 
   override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
     guard let position = touches.first?.location(in: self) else { return }
-    changeDirection(position)
+    changeDirection(position, startTouchLocation)
   }
 
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     guard let touch = touches.first else { return }
     startTouchLocation = touch.location(in: self)
-    if self.state != .playing {
+
+    if state == .paused || state == .notStarted {
       self.state = .playing
       startGame()
     }
@@ -100,12 +100,11 @@ class GameScene: SKScene, ObservableObject {
 
   func endGame() {
     HapticManager.shared.notification(type: .error)
-    self.state = .gameOver
     self.timer?.invalidate()
+    self.state = .gameOver
   }
 
   func restartGame() {
-//    self.gameOver = false
     self.snake.removeAll()
     self.removeAllChildren()
 
@@ -121,6 +120,14 @@ class GameScene: SKScene, ObservableObject {
       self.startGame()
       state = .playing
     } else {
+      self.timer?.invalidate()
+      state = .paused
+    }
+  }
+
+  func showSettings() {
+    settingsAreShown.toggle()
+    if state == .playing {
       self.timer?.invalidate()
       state = .paused
     }
@@ -153,31 +160,31 @@ class GameScene: SKScene, ObservableObject {
 // MARK: - GameSetup Methods
 extension GameScene {
   func initialSetup() {
-    self.backgroundColor = ColorManager.colorTheme.backgroundColor
+    self.backgroundColor = colorTheme.backgroundColor
+    soundAction = SKAction.playSoundFileNamed("bite.wav", waitForCompletion: false)
     setupSnake()
     setupFood()
   }
 
   func setupSnake() {
-    let snakeXPosition = frame.midX + (snakeLength)
-    let snakeYPosition = frame.midY + (snakeLength)
+    let startPosition = CGPoint(x: frame.midX + snakeLength, y: frame.midY + snakeLength)
 
-    let snakeHead = SKSpriteNode(color: ColorManager.colorTheme.snakeColor, size: snakeHeadSize)
+    let snakeHead = SKSpriteNode(color: colorTheme.snakeColor, size: snakeHeadSize)
     if gameSettings.showNodeBorders {
-      snakeHead.drawBorder(color: ColorManager.colorTheme.snakeBorderColor, width: 1)
+      snakeHead.drawBorder(color: colorTheme.snakeBorderColor, width: 1)
     }
-    snakeHead.position = CGPoint(x: snakeXPosition, y: snakeYPosition)
+    snakeHead.position = startPosition
     snakeHead.anchorPoint = CGPoint(x: 0, y: 0)
     self.snake.insert(snakeHead, at: 0)
     self.addChild(snakeHead)
   }
 
   func setupFood() {
-    self.food = SKSpriteNode(color: ColorManager.colorTheme.foodColors.randomElement()!, size: snakeHeadSize)
+    self.food = SKSpriteNode(color: colorTheme.foodColors.randomElement()!, size: snakeHeadSize)
     if gameSettings.showNodeBorders {
-      food.drawBorder(color: ColorManager.colorTheme.foodBorderColor, width: 1)
+      food.drawBorder(color: colorTheme.foodBorderColor, width: 1)
     }
-    self.food.position = randomFoodPosition(in: self.frame, with: snakeLength)
+    self.food.position = getRandomPosition(in: self.frame, with: snakeLength)
     self.food.anchorPoint = .zero
     self.food.zPosition = -1
     addChild(food)
@@ -189,20 +196,20 @@ extension GameScene {
 extension GameScene {
 
   // Set direction based on touch distance and movement
-  func changeDirection(_ currentTouchLocation: CGPoint) {
+  func changeDirection(_ currentTouchLocation: CGPoint, _ startTouchLocation: CGPoint) {
     let xDist = abs(currentTouchLocation.x - self.startTouchLocation.x)
     let yDist = abs(currentTouchLocation.y - self.startTouchLocation.y)
 
-    if self.startTouchLocation.y > currentTouchLocation.y && yDist > xDist && self.dir != .up {
+    if startTouchLocation.y > currentTouchLocation.y && yDist > xDist && self.dir != .up {
       self.dir = .down
     }
-    else if self.startTouchLocation.y < currentTouchLocation.y && yDist > xDist && self.dir != .down {
+    else if startTouchLocation.y < currentTouchLocation.y && yDist > xDist && self.dir != .down {
       self.dir = .up
     }
-    else if self.startTouchLocation.x < currentTouchLocation.x && yDist < xDist && self.dir != .left {
+    else if startTouchLocation.x < currentTouchLocation.x && yDist < xDist && self.dir != .left {
       self.dir = .right
     }
-    else if self.startTouchLocation.x > currentTouchLocation.x && yDist < xDist && self.dir != .right {
+    else if startTouchLocation.x > currentTouchLocation.x && yDist < xDist && self.dir != .right {
       self.dir = .left
     }
   }
@@ -292,7 +299,7 @@ extension GameScene {
           return
         }
       }
-    } else if !options.wallsEnabled {
+    } else if !gameSettings.wallsEnabled {
       switch dir {
       case .left:
         if snakePosition.x == sceneFrame.minX {
@@ -317,7 +324,7 @@ extension GameScene {
 
 // MARK: - Generate FoodPosition && Snake Growth
 extension GameScene {
-  func randomFoodPosition(in rect: CGRect, with length: CGFloat) -> CGPoint {
+  func getRandomPosition(in rect: CGRect, with length: CGFloat) -> CGPoint {
     let rows = Int(rect.maxX / length)
     let cols = Int(rect.maxY / length)
 
@@ -327,7 +334,7 @@ extension GameScene {
     var randomPosition = CGPoint(x: randomX, y: randomY)
     for node in snake {
       if node.position == randomPosition {
-        randomPosition = randomFoodPosition(in: rect, with: length)
+        randomPosition = getRandomPosition(in: rect, with: length)
       }
     }
     return randomPosition
@@ -341,19 +348,17 @@ extension GameScene {
   }
 
   fileprivate func growSnake() {
-    let snakeBodyPart = SKSpriteNode(color: ColorManager.colorTheme.snakeColor, size: snakeHeadSize)
+    let snakeBodyPart = SKSpriteNode(color: colorTheme.snakeColor, size: snakeHeadSize)
     snakeBodyPart.anchorPoint = .zero
-    if gameSettings.showNodeBorders { snakeBodyPart.drawBorder(color: ColorManager.colorTheme.snakeBorderColor, width: 1) }
+    if gameSettings.showNodeBorders { snakeBodyPart.drawBorder(color: colorTheme.snakeBorderColor, width: 1) }
     self.snake.append(snakeBodyPart)
     self.addChild(snakeBodyPart)
   }
 
   func eatFood() {
-    soundAction = SKAction.playSoundFileNamed("bite.wav", waitForCompletion: true)
-    snake.first!.run(soundAction)
-
-    self.food?.position = randomFoodPosition(in: self.frame, with: snakeLength)
-    self.food?.color = ColorManager.colorTheme.foodColors.randomElement()!
+    run(soundAction)
+    self.food?.position = getRandomPosition(in: self.frame, with: snakeLength)
+    self.food?.color = colorTheme.foodColors.randomElement()!
 
     growSnake()
     updateHighscore()

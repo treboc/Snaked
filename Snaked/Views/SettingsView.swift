@@ -15,8 +15,8 @@ struct SettingsView: View {
     NavigationView {
       List {
         Section {
-          Toggle("Show borders around snake / food.", isOn: $gameScene.gameSettings.showNodeBorders)
-          Toggle("Enable walls.", isOn: $gameScene.gameSettings.wallsEnabled)
+          Toggle("Show borders around snake / food", isOn: $gameScene.gameSettings.showNodeBorders)
+          Toggle("Enable walls", isOn: $gameScene.gameSettings.wallsEnabled)
           Picker("Speed", selection: $gameScene.gameSettings.gameSpeedSelection) {
             ForEach(GameScene.GameSpeed.allCases, id: \.hashValue) { speed in
               Text("\(speed.description)")
@@ -49,6 +49,6 @@ struct SettingsView: View {
       }
       .navigationTitle("Settings")
     }
-    .tint(Color(uiColor: ColorManager.colorTheme.tintColor))
+    .tint(Color(uiColor: UIColor.Dracula.tintColor))
   }
 }

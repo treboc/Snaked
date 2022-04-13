@@ -9,10 +9,7 @@ import SwiftUI
 
 @main
 struct SnakedApp: App {
-  @StateObject var scene: GameScene = {
-    let scene = GameScene()
-    return scene
-  }()
+  @StateObject var scene: GameScene = GameScene()
 
   var body: some Scene {
     WindowGroup {

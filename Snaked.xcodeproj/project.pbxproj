@@ -9,10 +9,11 @@
 /* Begin PBXBuildFile section */
 		8A10A2EB2804AF56000B1F7B /* bite.wav in Resources */ = {isa = PBXBuildFile; fileRef = 8A10A2EA2804AF56000B1F7B /* bite.wav */; };
 		8A10A2ED2804BF58000B1F7B /* GameSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A10A2EC2804BF58000B1F7B /* GameSettings.swift */; };
+		8A10A2F02805572A000B1F7B /* DeviceKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8A10A2EF2805572A000B1F7B /* DeviceKit */; };
 		8A44CAB12801B4AC005EC1D0 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A44CAB02801B4AC005EC1D0 /* GameScene.swift */; };
 		8A44CAB32801CEEE005EC1D0 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A44CAB22801CEEE005EC1D0 /* HapticManager.swift */; };
 		8A802B49280205E5002999AB /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A802B48280205E5002999AB /* SettingsView.swift */; };
-		8A802B4B280294D0002999AB /* ColorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A802B4A280294D0002999AB /* ColorManager.swift */; };
+		8A802B4B280294D0002999AB /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A802B4A280294D0002999AB /* ThemeManager.swift */; };
 		8A802B4F28029982002999AB /* SKSpriteNode+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A802B4E28029982002999AB /* SKSpriteNode+Extension.swift */; };
 		8A802B532802B119002999AB /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8A802B522802B119002999AB /* Launch Screen.storyboard */; };
 		8A802B552802B180002999AB /* UIDevice+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A802B542802B180002999AB /* UIDevice+Extension.swift */; };
@@ -28,7 +29,7 @@
 		8A44CAB02801B4AC005EC1D0 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		8A44CAB22801CEEE005EC1D0 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
 		8A802B48280205E5002999AB /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		8A802B4A280294D0002999AB /* ColorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorManager.swift; sourceTree = "<group>"; };
+		8A802B4A280294D0002999AB /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
 		8A802B4E28029982002999AB /* SKSpriteNode+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SKSpriteNode+Extension.swift"; sourceTree = "<group>"; };
 		8A802B522802B119002999AB /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		8A802B542802B180002999AB /* UIDevice+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+Extension.swift"; sourceTree = "<group>"; };
@@ -44,6 +45,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A10A2F02805572A000B1F7B /* DeviceKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,15 +61,23 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		8A10A2F12805FA07000B1F7B /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				8A802B4E28029982002999AB /* SKSpriteNode+Extension.swift */,
+				8A802B542802B180002999AB /* UIDevice+Extension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		8A802B4C280294E6002999AB /* Components */ = {
 			isa = PBXGroup;
 			children = (
 				8A10A2EC2804BF58000B1F7B /* GameSettings.swift */,
 				8A44CAB22801CEEE005EC1D0 /* HapticManager.swift */,
-				8A802B4A280294D0002999AB /* ColorManager.swift */,
-				8A802B4E28029982002999AB /* SKSpriteNode+Extension.swift */,
+				8A802B4A280294D0002999AB /* ThemeManager.swift */,
+				8A10A2F12805FA07000B1F7B /* Extensions */,
 				8A802B522802B119002999AB /* Launch Screen.storyboard */,
-				8A802B542802B180002999AB /* UIDevice+Extension.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -134,6 +144,9 @@
 			dependencies = (
 			);
 			name = Snaked;
+			packageProductDependencies = (
+				8A10A2EF2805572A000B1F7B /* DeviceKit */,
+			);
 			productName = Snaked;
 			productReference = 8A858C902800C789002385E1 /* Snaked.app */;
 			productType = "com.apple.product-type.application";
@@ -162,6 +175,9 @@
 				Base,
 			);
 			mainGroup = 8A858C872800C789002385E1;
+			packageReferences = (
+				8A10A2EE2805572A000B1F7B /* XCRemoteSwiftPackageReference "DeviceKit" */,
+			);
 			productRefGroup = 8A858C912800C789002385E1 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -196,7 +212,7 @@
 				8A44CAB12801B4AC005EC1D0 /* GameScene.swift in Sources */,
 				8A10A2ED2804BF58000B1F7B /* GameSettings.swift in Sources */,
 				8A802B4F28029982002999AB /* SKSpriteNode+Extension.swift in Sources */,
-				8A802B4B280294D0002999AB /* ColorManager.swift in Sources */,
+				8A802B4B280294D0002999AB /* ThemeManager.swift in Sources */,
 				8A44CAB32801CEEE005EC1D0 /* HapticManager.swift in Sources */,
 				8A858C942800C789002385E1 /* SnakedApp.swift in Sources */,
 			);
@@ -403,6 +419,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		8A10A2EE2805572A000B1F7B /* XCRemoteSwiftPackageReference "DeviceKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/devicekit/DeviceKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		8A10A2EF2805572A000B1F7B /* DeviceKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8A10A2EE2805572A000B1F7B /* XCRemoteSwiftPackageReference "DeviceKit" */;
+			productName = DeviceKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 8A858C882800C789002385E1 /* Project object */;
 }

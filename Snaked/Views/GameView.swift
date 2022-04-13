@@ -11,8 +11,8 @@ import UIKit
 
 struct GameView: View {
   @ObservedObject var scene: GameScene
+  var colorTheme = UIColor.Dracula()
 
-  let tintColor: UIColor = ColorManager.colorTheme.tintColor
   var isAnimating: Bool {
     scene.state == .playing
   }
@@ -28,7 +28,7 @@ struct GameView: View {
 
   var body: some View {
     ZStack(alignment: .center) {
-      Color(uiColor: ColorManager.colorTheme.secondBackgroundColor)
+      Color(uiColor: colorTheme.secondBackgroundColor)
         .ignoresSafeArea()
 
       VStack {
@@ -59,7 +59,7 @@ struct GameView: View {
           .navigationBarHidden(true)
       }
     }
-    .sheet(isPresented: $scene.showOptions) {
+    .sheet(isPresented: $scene.settingsAreShown) {
       SettingsView(gameScene: scene)
     }
   }
@@ -71,7 +71,7 @@ extension GameView {
       Text("Snaked")
         .font(.largeTitle.bold())
         .overlay(
-          LinearGradient(colors: ColorManager.colorTheme.gradientColors, startPoint: .leading, endPoint: .trailing)
+          LinearGradient(colors: colorTheme.gradientColors, startPoint: .leading, endPoint: .trailing)
         )
         .mask(Text("Snaked").font(.largeTitle.bold()))
       Spacer()
@@ -104,9 +104,9 @@ extension GameView {
     SpriteView(scene: scene)
       .overlay(
         Rectangle()
-          .stroke(Color(uiColor: .label), lineWidth: scene.gameSettings.wallsEnabled ? 2 : 0)
+          .stroke(Color(uiColor: colorTheme.foregroundColor), lineWidth: scene.gameSettings.wallsEnabled ? 2 : 0)
       )
-      .shadow(color: (isAnimating && scene.gameSettings.wallsEnabled) ? Color(uiColor: ColorManager.colorTheme.foodColors[2]) : .clear, radius: 10, x: 0, y: 0)
+      .shadow(color: (isAnimating && scene.gameSettings.wallsEnabled) ? Color(uiColor: colorTheme.foodColors[2]) : .clear, radius: 10, x: 0, y: 0)
       .animation(.easeInOut(duration: 2).repeatForever(), value: isAnimating)
   }
 
@@ -118,28 +118,26 @@ extension GameView {
         .frame(width: 30, height: 20)
     }
     .buttonStyle(.borderedProminent)
-    .tint(Color(uiColor: tintColor))
-    .foregroundColor(Color(uiColor: ColorManager.colorTheme.backgroundColor))
+    .tint(Color(uiColor: colorTheme.tintColor))
+    .foregroundColor(Color(uiColor: colorTheme.backgroundColor))
     .disabled(scene.state == .notStarted || scene.state == .gameOver)
   }
 
   private var menuButton: some View {
     Button {
-      scene.showOptions.toggle()
-      scene.timer?.invalidate()
-      scene.state = .paused
+      scene.showSettings()
     } label: {
       Image(systemName: "line.3.horizontal")
         .frame(width: 30, height: 20)
     }
     .buttonStyle(.borderedProminent)
-    .tint(Color(uiColor: tintColor))
-    .foregroundColor(Color(uiColor: ColorManager.colorTheme.backgroundColor))
+    .tint(Color(uiColor: colorTheme.tintColor))
+    .foregroundColor(Color(uiColor: colorTheme.backgroundColor))
   }
 
   private var gameOverOverlay: some View {
     ZStack {
-      Color(uiColor: ColorManager.colorTheme.backgroundColor)
+      Color(uiColor: colorTheme.backgroundColor)
         .ignoresSafeArea()
 
       VStack(spacing: 50) {
@@ -150,12 +148,13 @@ extension GameView {
         }
         .buttonStyle(.borderedProminent)
         .controlSize(.regular)
-        .tint(Color(uiColor: tintColor))
+        .tint(Color(uiColor: colorTheme.tintColor))
       }
     }
   }
 
   struct OverlayLabel: View {
+    private let colorTheme = UIColor.Dracula()
     let title: String
     let message: String
     let shouldAnimate: Bool
@@ -170,9 +169,8 @@ extension GameView {
       .padding()
       .background(
         RoundedRectangle(cornerRadius: 10)
-          .fill(Color(uiColor: !isAnimated ? ColorManager.colorTheme.tintColor : ColorManager.colorTheme.foodColors[3]))
+          .fill(Color(uiColor: !isAnimated ? colorTheme.tintColor : colorTheme.secondBackgroundColor))
       )
-      .foregroundColor(Color(uiColor: ColorManager.colorTheme.backgroundColor))
       .padding()
       .onAppear {
         if shouldAnimate {
