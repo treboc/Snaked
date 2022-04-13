@@ -201,7 +201,6 @@ extension GameScene {
 
 // MARK: - Snake Control and Movement
 extension GameScene {
-
   // Set direction based on touch distance and movement
   func changeDirection(_ currentTouchLocation: CGPoint, _ startTouchLocation: CGPoint) {
     let xDist = abs(currentTouchLocation.x - self.startTouchLocation.x)
@@ -221,59 +220,31 @@ extension GameScene {
     }
   }
 
-  func moveSnake() {
-    let snakePosition = self.snake[0].position
-    let sceneFrame = self.frame
-
-    // Check if the snakeHead is on any of the snake body parts -> GameOver
-    let snakeBody: ArraySlice<SKSpriteNode>
-    if snake.count > 2 {
-      snakeBody = snake.dropFirst()
-      for bodyPart in snakeBody {
-        if bodyPart.position == snakePosition {
-          state = .gameOver
-          return
-        }
-      }
-    }
-
-    var positionInFront: CGPoint {
-      var pos = snakePosition
-      switch dir {
-      case .left:
-        pos.x -= snakeLength
-        return pos
-      case .up:
-        pos.y += snakeLength
-        return pos
-      case .right:
-        pos.x += snakeLength
-        return pos
-      case .down:
-        pos.y -= snakeLength
-        return pos
-      }
-    }
-
-    // Check if snakeHead is on food -> let snake grow
-    if positionInFront == food.position  && state == .playing {
-      eatFood()
-    }
-
-    // save the position before movement, to pass it to the body part behind the head
-    var prevPosition = snake[0].position
-
-    // actual movement of the head
+  private var positionInFront: CGPoint {
+    guard let snakeHeadPostion = snake.first?.position else { return .zero }
+    var pos = snakeHeadPostion
     switch dir {
     case .left:
-      self.snake[0].position.x -= snakeLength
+      pos.x -= snakeLength
+      return pos
     case .up:
-      self.snake[0].position.y += snakeLength
+      pos.y += snakeLength
+      return pos
     case .right:
-      self.snake[0].position.x += snakeLength
+      pos.x += snakeLength
+      return pos
     case .down:
-      self.snake[0].position.y -= snakeLength
+      pos.y -= snakeLength
+      return pos
     }
+  }
+
+  func moveForward() {
+    // save the position before movement, to pass it to the body part behind the head
+    var prevPosition = snake.first!.position
+
+    // actual movement of the head
+    self.snake[0].position = positionInFront
 
     // for every body part beside the head, set it to the correct position
     for index in 1..<snake.count {
@@ -281,26 +252,49 @@ extension GameScene {
       snake[index].position = prevPosition
       prevPosition = currentPosition
     }
+  }
+
+  func moveSnake() {
+    let sceneFrame = self.frame
+
+    // Check if the snakeHead is on any of the snake body parts -> GameOver
+    if snake.count > 2 {
+      let snakeBody: ArraySlice<SKSpriteNode>
+      snakeBody = snake.dropFirst()
+      for bodyPart in snakeBody {
+        if positionInFront == bodyPart.position {
+          endGame()
+          return
+        }
+      }
+    }
+
+    // Check if snakeHead is on food -> let snake grow
+    if positionInFront == food.position {
+      eatFood()
+      moveForward()
+    }
+
     // "Collision" check on the walls
     if gameSettings.wallsEnabled {
       switch dir {
       case .left:
-        if snakePosition.x == sceneFrame.minX {
+        if snake[0].position.x == sceneFrame.minX {
           endGame()
           return
         }
       case .up:
-        if snakePosition.y + snakeLength == sceneFrame.maxY {
+        if snake[0].position.y + snakeLength == sceneFrame.maxY {
           endGame()
           return
         }
       case .right:
-        if snakePosition.x + snakeLength == sceneFrame.maxX {
+        if snake[0].position.x + snakeLength == sceneFrame.maxX {
           endGame()
           return
         }
       case .down:
-        if snakePosition.y == sceneFrame.minY {
+        if snake[0].position.y == sceneFrame.minY {
           endGame()
           return
         }
@@ -308,23 +302,29 @@ extension GameScene {
     } else if !gameSettings.wallsEnabled {
       switch dir {
       case .left:
-        if snakePosition.x == sceneFrame.minX {
+        if snake[0].position.x == sceneFrame.minX {
           snake[0].position.x = sceneFrame.maxX - snakeLength
+          return
         }
       case .up:
-        if snakePosition.y + snakeLength == sceneFrame.maxY {
+        if snake[0].position.y + snakeLength == sceneFrame.maxY {
           snake[0].position.y = sceneFrame.minY
+          return
         }
       case .right:
-        if snakePosition.x + snakeLength == sceneFrame.maxX {
+        if snake[0].position.x + snakeLength == sceneFrame.maxX {
           snake[0].position.x = sceneFrame.minX
+          return
         }
       case .down:
-        if snakePosition.y == sceneFrame.minY {
+        if snake[0].position.y == sceneFrame.minY {
           snake[0].position.y = sceneFrame.maxY - snakeLength
+          return
         }
       }
     }
+
+    moveForward()
   }
 }
 
