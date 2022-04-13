@@ -73,6 +73,7 @@
 		8A802B4C280294E6002999AB /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				8A44CAB02801B4AC005EC1D0 /* GameScene.swift */,
 				8A10A2EC2804BF58000B1F7B /* GameSettings.swift */,
 				8A44CAB22801CEEE005EC1D0 /* HapticManager.swift */,
 				8A802B4A280294D0002999AB /* ThemeManager.swift */,
@@ -111,7 +112,6 @@
 			isa = PBXGroup;
 			children = (
 				8A858C932800C789002385E1 /* SnakedApp.swift */,
-				8A44CAB02801B4AC005EC1D0 /* GameScene.swift */,
 				8A802B4D280294F5002999AB /* Views */,
 				8A802B4C280294E6002999AB /* Components */,
 				8A10A2E92804AF3F000B1F7B /* Resources */,

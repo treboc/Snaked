@@ -60,18 +60,6 @@ class GameScene: SKScene, ObservableObject {
     case left, up, right, down
   }
 
-  override func didMove(to view: SKView) {
-    self.scaleMode = .fill
-    if UIDevice.current.hasNotch {
-      self.size = CGSize(width: 300, height: 500)
-    } else {
-      self.size = CGSize(width: 300, height: 400)
-    }
-
-    highscore = UserDefaults.standard.integer(forKey: "highscore")
-    loadSettings()
-    initialSetup()
-  }
 
   override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
     guard let position = touches.first?.location(in: self) else { return }
@@ -164,6 +152,20 @@ class GameScene: SKScene, ObservableObject {
 
 // MARK: - GameSetup Methods
 extension GameScene {
+  // Setup
+  override func didMove(to view: SKView) {
+    self.scaleMode = .fill
+    if UIDevice.current.hasNotch {
+      self.size = CGSize(width: 300, height: 500)
+    } else {
+      self.size = CGSize(width: 300, height: 400)
+    }
+
+    highscore = UserDefaults.standard.integer(forKey: "highscore")
+    loadSettings()
+    initialSetup()
+  }
+
   func initialSetup() {
     self.backgroundColor = colorTheme.backgroundColor
     soundAction = SKAction.playSoundFileNamed("bite.wav", waitForCompletion: false)
@@ -279,7 +281,6 @@ extension GameScene {
       snake[index].position = prevPosition
       prevPosition = currentPosition
     }
-
     // "Collision" check on the walls
     if gameSettings.wallsEnabled {
       switch dir {
