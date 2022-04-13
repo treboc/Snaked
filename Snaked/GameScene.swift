@@ -114,6 +114,11 @@ class GameScene: SKScene, ObservableObject {
     state = .notStarted
   }
 
+  func resetHighscore() {
+    UserDefaults.standard.set(0, forKey: "highscore")
+    self.highscore = 0
+  }
+
   func togglePlayPause() {
     if state == .paused {
       self.timer?.invalidate()

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SettingsView: View {
   @ObservedObject var gameScene: GameScene
+  @State private var showResetHighscoreAlert = false
   @Environment(\.dismiss) private var dismiss
 
   var body: some View {
@@ -34,7 +35,18 @@ struct SettingsView: View {
             gameScene.restartGame()
             dismiss()
           }
+          Button("Reset Highscore", role: .destructive) {
+            showResetHighscoreAlert.toggle()
+          }
         }
+      }
+      .alert("Are you sure?", isPresented: $showResetHighscoreAlert) {
+        Button("Cancel", role: .cancel) {}
+        Button("Yes", role: .destructive) {
+          gameScene.resetHighscore()
+        }
+      } message: {
+        Text("This deletes your highscore!")
       }
       .onChange(of: gameScene.gameSettings) { _ in
         gameScene.restartGame()
