@@ -81,7 +81,7 @@ class GameScene: SKScene, ObservableObject {
     self.timer = Timer.scheduledTimer(withTimeInterval: gameSettings.gameSpeedSelection.rawValue, repeats: true, block: { [weak self] _ in
       guard let self = self else { return }
       if self.state == .playing {
-        self.moveSnake()
+        self.move()
       }
     })
   }
@@ -239,7 +239,7 @@ extension GameScene {
     }
   }
 
-  func moveForward() {
+  func moveSnakeBody() {
     // save the position before movement, to pass it to the body part behind the head
     var prevPosition = snake.first!.position
 
@@ -254,15 +254,19 @@ extension GameScene {
     }
   }
 
-  func moveSnake() {
+  func move() {
     let sceneFrame = self.frame
+//    snake.first?.position = positionInFront
+    moveSnakeBody()
+
+    guard let currentPosition = snake.first?.position else { return }
 
     // Check if the snakeHead is on any of the snake body parts -> GameOver
     if snake.count > 2 {
       let snakeBody: ArraySlice<SKSpriteNode>
       snakeBody = snake.dropFirst()
       for bodyPart in snakeBody {
-        if positionInFront == bodyPart.position {
+        if currentPosition == bodyPart.position {
           endGame()
           return
         }
@@ -270,31 +274,31 @@ extension GameScene {
     }
 
     // Check if snakeHead is on food -> let snake grow
-    if positionInFront == food.position {
+    if currentPosition == food.position {
       eatFood()
-      moveForward()
+      moveSnakeBody()
     }
 
     // "Collision" check on the walls
     if gameSettings.wallsEnabled {
       switch dir {
       case .left:
-        if snake[0].position.x == sceneFrame.minX {
+        if currentPosition.x == sceneFrame.minX {
           endGame()
           return
         }
       case .up:
-        if snake[0].position.y + snakeLength == sceneFrame.maxY {
+        if currentPosition.y + snakeLength == sceneFrame.maxY {
           endGame()
           return
         }
       case .right:
-        if snake[0].position.x + snakeLength == sceneFrame.maxX {
+        if currentPosition.x + snakeLength == sceneFrame.maxX {
           endGame()
           return
         }
       case .down:
-        if snake[0].position.y == sceneFrame.minY {
+        if currentPosition.y == sceneFrame.minY {
           endGame()
           return
         }
@@ -302,29 +306,27 @@ extension GameScene {
     } else if !gameSettings.wallsEnabled {
       switch dir {
       case .left:
-        if snake[0].position.x == sceneFrame.minX {
+        if currentPosition.x + snakeLength == sceneFrame.minX {
           snake[0].position.x = sceneFrame.maxX - snakeLength
           return
         }
       case .up:
-        if snake[0].position.y + snakeLength == sceneFrame.maxY {
+        if currentPosition.y == sceneFrame.maxY {
           snake[0].position.y = sceneFrame.minY
           return
         }
       case .right:
-        if snake[0].position.x + snakeLength == sceneFrame.maxX {
+        if currentPosition.x == sceneFrame.maxX {
           snake[0].position.x = sceneFrame.minX
           return
         }
       case .down:
-        if snake[0].position.y == sceneFrame.minY {
+        if currentPosition.y == sceneFrame.minY {
           snake[0].position.y = sceneFrame.maxY - snakeLength
           return
         }
       }
     }
-
-    moveForward()
   }
 }
 

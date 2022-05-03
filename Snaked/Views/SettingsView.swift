@@ -61,6 +61,6 @@ struct SettingsView: View {
       }
       .navigationTitle("Settings")
     }
-    .tint(Color(uiColor: UIColor.Dracula.tintColor))
+    .accentColor(Color(uiColor: UIColor.Dracula.tintColor))
   }
 }
